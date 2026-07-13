@@ -367,12 +367,16 @@ UIS.InputChanged:Connect(function(input)
 	if dragging and input.UserInputType == Enum.UserInputType.Touch then
 		local delta = input.Position - dragStart
 
-		minBtn.Position = UDim2.new(
-			startPos.X.Scale,
-			startPos.X.Offset + delta.X,
-			startPos.Y.Scale,
-			startPos.Y.Offset + delta.Y
-		)
+		local newX = startPos.X.Offset + delta.X
+		local newY = startPos.Y.Offset + delta.Y
+
+		local screenSize = workspace.CurrentCamera.ViewportSize
+		local buttonSize = minBtn.AbsoluteSize
+
+		newX = math.clamp(newX, 0, screenSize.X - buttonSize.X)
+		newY = math.clamp(newY, 0, screenSize.Y - buttonSize.Y)
+
+		minBtn.Position = UDim2.new(0, newX, 0, newY)
 	end
 end)
 
