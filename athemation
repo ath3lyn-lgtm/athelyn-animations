@@ -1028,3 +1028,10 @@ searchBtn.MouseButton1Click:Connect(function() executeSearch(sb.Text) end)
 sb.FocusLost:Connect(function(enterPressed) if enterPressed then executeSearch(sb.Text) end end)
 
 executeSearch("")
+pcall(function()
+    game:GetService("StarterGui"):SetCore("SendNotification", {
+        Title = "AthelynAnimations",
+        Text = "Successfully loaded!",
+        Duration = 5
+    })
+end)
