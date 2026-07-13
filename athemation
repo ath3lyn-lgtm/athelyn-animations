@@ -349,7 +349,38 @@ minBtnHit.MouseButton1Click:Connect(function()
 	task.wait(TOGGLE_COOLDOWN)
 	UI_BUSY = false
 end)
+local UIS = game:GetService("UserInputService")
 
+local dragging = false
+local dragStart
+local startPos
+
+minBtnHit.InputBegan:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.Touch then
+		dragging = true
+		dragStart = input.Position
+		startPos = minBtn.Position
+	end
+end)
+
+UIS.InputChanged:Connect(function(input)
+	if dragging and input.UserInputType == Enum.UserInputType.Touch then
+		local delta = input.Position - dragStart
+
+		minBtn.Position = UDim2.new(
+			startPos.X.Scale,
+			startPos.X.Offset + delta.X,
+			startPos.Y.Scale,
+			startPos.Y.Offset + delta.Y
+		)
+	end
+end)
+
+UIS.InputEnded:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.Touch then
+		dragging = false
+	end
+end)
 local lp_frame = Instance.new("Frame", mf)
 lp_frame.Size, lp_frame.Position, lp_frame.BackgroundTransparency = UDim2.new(0, LEFT_W, 1, 0), UDim2.new(0, 0, 0, 0), 1
 
