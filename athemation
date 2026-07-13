@@ -1030,8 +1030,8 @@ sb.FocusLost:Connect(function(enterPressed) if enterPressed then executeSearch(s
 executeSearch("")
 pcall(function()
     game:GetService("StarterGui"):SetCore("SendNotification", {
-        Title = "AthelynAnimations",
-        Text = "Successfully loaded!",
+        Title = "Athemation v2",
+        Text = "Loaded In Anhh👅",
         Duration = 5
     })
 end)
