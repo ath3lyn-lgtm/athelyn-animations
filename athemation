@@ -355,7 +355,7 @@ lp_frame.Size, lp_frame.Position, lp_frame.BackgroundTransparency = UDim2.new(0,
 
 local titleLbl = Instance.new("TextLabel", lp_frame)
 titleLbl.Size, titleLbl.Position, titleLbl.BackgroundTransparency = UDim2.new(1, 0, 0, s(22)), UDim2.new(0, s(4), 0, 0), 1
-titleLbl.Text, titleLbl.TextColor3, titleLbl.Font, titleLbl.TextSize = "Athelyn Animations", C.text, Enum.Font.GothamBlack, s(15)
+titleLbl.Text, titleLbl.TextColor3, titleLbl.Font, titleLbl.TextSize = "AthelynAnimations", C.text, Enum.Font.GothamBlack, s(15)
 titleLbl.TextXAlignment, titleLbl.ClipsDescendants = Enum.TextXAlignment.Left, true
 
 local header = Instance.new("Frame", lp_frame)
@@ -428,7 +428,7 @@ local footer = Instance.new("Frame", lp_frame)
 footer.Size, footer.Position, footer.BackgroundTransparency = UDim2.new(1, -s(8), 0, FOOT_H), UDim2.new(0, s(4), 1, -FOOT_H), 1
 
 local prevBtn = Instance.new("TextButton", footer)
-prevBtn.Size, prevBtn.Text, prevBtn.BackgroundColor3, prevBtn.ClipsDescendants = UDim2.new(0, s(52), 1, 0), "â Back", C.surfaceHi, true
+prevBtn.Size, prevBtn.Text, prevBtn.BackgroundColor3, prevBtn.ClipsDescendants = UDim2.new(0, s(52), 1, 0), "← Back", C.surfaceHi, true
 prevBtn.Font, prevBtn.TextSize, prevBtn.TextColor3 = Enum.Font.GothamBold, s(10), C.textDim
 corner(prevBtn, s(4))
 
@@ -437,7 +437,7 @@ pageLbl.Size, pageLbl.Position, pageLbl.Text, pageLbl.ClipsDescendants = UDim2.n
 pageLbl.BackgroundTransparency, pageLbl.TextColor3, pageLbl.Font = 1, C.textDim, Enum.Font.Gotham
 
 local nextBtn = Instance.new("TextButton", footer)
-nextBtn.Size, nextBtn.Position, nextBtn.Text, nextBtn.ClipsDescendants = UDim2.new(0, s(52), 1, 0), UDim2.new(1, -s(52), 0, 0), "Next â", true
+nextBtn.Size, nextBtn.Position, nextBtn.Text, nextBtn.ClipsDescendants = UDim2.new(0, s(52), 1, 0), UDim2.new(1, -s(52), 0, 0), "Next →", true
 nextBtn.BackgroundColor3, nextBtn.Font, nextBtn.TextSize = C.surfaceHi, Enum.Font.GothamBold, s(10)
 corner(nextBtn, s(4))
 
@@ -560,7 +560,7 @@ local function getSpecificTrack(fetchedTracks, targetType)
 	return fetchedTracks[1]
 end
 
-local function truncate(str, maxLen) return #str > maxLen and str:sub(1, maxLen-1).."â¦" or str end
+local function truncate(str, maxLen) return #str > maxLen and str:sub(1, maxLen-1).."…" or str end
 
 local function tryPlayTrack(animator, track, looped)
 	local ok, pt = pcall(function() local tr = animator:LoadAnimation(track); tr.Looped=looped; tr:Play(); return tr end)
@@ -631,7 +631,7 @@ local function renderMasterTrack(itemPayload, assetTypeName)
 	local lowerType = string.lower(assetTypeName or "")
 	local displayType = shortNames[lowerType] or "Track"
 
-	statusLabel.Text = truncate(activeBundleName, 22) .. " â¢ " .. displayType .. " (loading...)"
+	statusLabel.Text = truncate(activeBundleName, 22) .. " • " .. displayType .. " (loading...)"
 	applyShimmer(statusLabel, C.textDim, Color3.new(1,1,1))
 	
 	local vpShimmer = masterViewport:FindFirstChild("LoadingShimmer")
@@ -650,7 +650,7 @@ local function renderMasterTrack(itemPayload, assetTypeName)
 			trackToPlay = (#fetchedTracks>0) and getSpecificTrack(fetchedTracks, lowerType) or nil
 			if trackToPlay then break end
 			attempt = attempt + 1
-			statusLabel.Text = truncate(activeBundleName, 22) .. " â¢ " .. displayType .. " (reloading..." .. attempt .. ")"
+			statusLabel.Text = truncate(activeBundleName, 22) .. " • " .. displayType .. " (reloading..." .. attempt .. ")"
 			clearAssetCache(itemPayload.Id)
 			task.wait(math.min(0.5 + attempt * 0.3, 3))
 		end
@@ -663,7 +663,7 @@ local function renderMasterTrack(itemPayload, assetTypeName)
 		end
 
 		activeMasterType = assetTypeName
-		statusLabel.Text = truncate(activeBundleName, 22) .. " â¢ " .. displayType
+		statusLabel.Text = truncate(activeBundleName, 22) .. " • " .. displayType
 		local isIdle = (lowerType == "idleanimation")
 		if isIdle and fetchedTracks and #fetchedTracks > 1 then
 			local pointer = 1
@@ -736,7 +736,7 @@ local function inspectBundleDetails(bundleId, bundleName)
 	table.clear(currentBundleItems)
 	wearSelectedBtn.Visible, wearAllBtn.Visible = false, false
 	activeBundleName, activeBundleId = bundleName or "Unknown", bundleId
-	statusLabel.Text = truncate(activeBundleName, 22) .. " â¢ Loading..."
+	statusLabel.Text = truncate(activeBundleName, 22) .. " • Loading..."
 	applyShimmer(statusLabel, C.textDim, Color3.new(1,1,1))
 	refreshBookmarkBtn()
 	for _, btn in pairs(animationButtons) do btn.BackgroundColor3, btn.TextColor3 = C.surfaceHi, C.textMuted end
@@ -744,7 +744,7 @@ local function inspectBundleDetails(bundleId, bundleName)
 	task.spawn(function()
 		local ok, res = pcall(function() return as:GetBundleDetailsAsync(bundleId) end)
 		if not ok or not res or not res.Items then 
-			statusLabel.Text = truncate(activeBundleName, 22) .. " â¢ Error" 
+			statusLabel.Text = truncate(activeBundleName, 22) .. " • Error" 
 			removeShimmer(statusLabel)
 			return 
 		end
@@ -771,7 +771,7 @@ local function inspectBundleDetails(bundleId, bundleName)
 			wearSelectedBtn.Visible = true
 			renderMasterTrack(currentBundleItems[slotToPlay], slotToPlay)
 		else
-			statusLabel.Text = truncate(activeBundleName, 22) .. " â¢ Missing Anim"
+			statusLabel.Text = truncate(activeBundleName, 22) .. " • Missing Anim"
 			removeShimmer(statusLabel)
 		end
 	end)
@@ -840,7 +840,7 @@ local function drawGridPage(dataList)
 		if currentTab == "Saved" then
 			local favBtn = Instance.new("TextButton", box)
 			favBtn.Size, favBtn.Position, favBtn.BackgroundTransparency = UDim2.new(0, s(20), 0, s(20)), UDim2.new(1, -s(22), 0, s(2)), 1
-			favBtn.Text, favBtn.Font, favBtn.TextSize, favBtn.ZIndex, favBtn.ClipsDescendants = (bundle.Fav and "â" or "â"), Enum.Font.GothamBold, s(14), 5, true
+			favBtn.Text, favBtn.Font, favBtn.TextSize, favBtn.ZIndex, favBtn.ClipsDescendants = (bundle.Fav and "★" or "☆"), Enum.Font.GothamBold, s(14), 5, true
 			favBtn.TextColor3 = bundle.Fav and C.fav or C.textMuted
 			
 			favBtn.MouseButton1Click:Connect(function()
@@ -850,7 +850,7 @@ local function drawGridPage(dataList)
 					saveJSON(SAVED_BUNDLES_FILE, savedBookmarks)
 					
 					bundle.Fav = savedBookmarks[sId].Fav
-					favBtn.Text = bundle.Fav and "â" or "â"
+					favBtn.Text = bundle.Fav and "★" or "☆"
 					favBtn.TextColor3 = bundle.Fav and C.fav or C.textMuted
 				end
 			end)
@@ -865,7 +865,7 @@ local function drawGridPage(dataList)
 		local saveCardBtn = Instance.new("TextButton", cardActions)
 		saveCardBtn.Size, saveCardBtn.Position = UDim2.new(0.5, -s(1), 1, 0), UDim2.new(0, 0, 0, 0)
 		saveCardBtn.BackgroundColor3, saveCardBtn.BackgroundTransparency = C.surface, 0.15
-		saveCardBtn.Text = alreadySaved and "â Saved" or "+ Save"
+		saveCardBtn.Text = alreadySaved and "✓ Saved" or "+ Save"
 		saveCardBtn.TextColor3 = alreadySaved and C.fav or C.textDim
 		saveCardBtn.Font, saveCardBtn.TextSize, saveCardBtn.ZIndex, saveCardBtn.ClipsDescendants = Enum.Font.GothamBold, s(7), 6, true
 		corner(saveCardBtn, s(3))
@@ -873,13 +873,13 @@ local function drawGridPage(dataList)
 		local wearCardBtn = Instance.new("TextButton", cardActions)
 		wearCardBtn.Size, wearCardBtn.Position = UDim2.new(0.5, -s(1), 1, 0), UDim2.new(0.5, s(2), 0, 0)
 		wearCardBtn.BackgroundColor3, wearCardBtn.BackgroundTransparency = C.surface, 0.15
-		wearCardBtn.Text, wearCardBtn.TextColor3 = "â¶ Wear", C.green
+		wearCardBtn.Text, wearCardBtn.TextColor3 = "▶ Wear", C.green
 		wearCardBtn.Font, wearCardBtn.TextSize, wearCardBtn.ZIndex, wearCardBtn.ClipsDescendants = Enum.Font.GothamBold, s(7), 6, true
 		corner(wearCardBtn, s(3))
 
 		saveCardBtn.MouseButton1Click:Connect(function()
 			local nowSaved = toggleBookmark(bundle.Id, bundle.Name)
-			saveCardBtn.Text = nowSaved and "â Saved" or "+ Save"
+			saveCardBtn.Text = nowSaved and "✓ Saved" or "+ Save"
 			saveCardBtn.TextColor3 = nowSaved and C.fav or C.textDim
 			if activeBundleId == bundle.Id then refreshBookmarkBtn() end
 			if currentTab == "Saved" and not nowSaved then
@@ -888,9 +888,9 @@ local function drawGridPage(dataList)
 		end)
 
 		wearCardBtn.MouseButton1Click:Connect(function()
-			wearCardBtn.Text = "â¦"
+			wearCardBtn.Text = "…"
 			wearBundleQuickly(bundle.Id, function()
-				if wearCardBtn and wearCardBtn.Parent then wearCardBtn.Text = "â¶ Wear" end
+				if wearCardBtn and wearCardBtn.Parent then wearCardBtn.Text = "▶ Wear" end
 			end)
 		end)
 
